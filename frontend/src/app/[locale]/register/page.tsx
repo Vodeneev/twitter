@@ -41,7 +41,7 @@ export default function RegisterPage() {
   if (done) {
     return (
       <AuthCard title={t('registerTitle')}>
-        <p className="rounded-md bg-ya-yellow/15 px-3 py-3 text-center text-brand">{t('checkEmail')}</p>
+        <p className="rounded-md bg-brand/10 px-3 py-3 text-center text-brand">{t('checkEmail')}</p>
         <div className="mt-4 text-center text-sm">
           <Link href="/login" className="text-brand hover:underline">
             {t('loginButton')}

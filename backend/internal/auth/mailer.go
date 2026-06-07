@@ -101,9 +101,9 @@ The link expires in one hour. If you did not ask for this, ignore this email.
 const emailHTML = `<!doctype html>
 <html><body style="font-family:system-ui,Segoe UI,Roboto,sans-serif;color:#0f1419;background:#f7f9f9;padding:24px;">
   <div style="max-width:520px;margin:0 auto;background:#fff;border:1px solid #eff3f4;border-radius:16px;padding:28px;">
-    <h2 style="margin:0 0 12px;color:#1d9bf0">%s</h2>
+    <h2 style="margin:0 0 12px;color:#FC3F1D">%s</h2>
     <p style="font-size:15px;line-height:1.5">%s</p>
-    <p style="margin:24px 0"><a href="%s" style="background:#1d9bf0;color:#fff;padding:12px 20px;border-radius:9999px;text-decoration:none;font-weight:600">%s</a></p>
+    <p style="margin:24px 0"><a href="%s" style="background:#FC3F1D;color:#fff;padding:12px 20px;border-radius:9999px;text-decoration:none;font-weight:600">%s</a></p>
     <p style="color:#536471;font-size:12px">%s</p>
   </div>
 </body></html>`

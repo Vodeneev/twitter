@@ -2,8 +2,12 @@ package yaps
 
 import (
 	"context"
+	"fmt"
+	"strconv"
+	"strings"
 	"time"
 
+	"github.com/Vodeneev/twitter/backend/internal/sqlutil"
 	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5"
 )
@@ -308,17 +312,79 @@ func (r *Repository) HashtagTimeline(ctx context.Context, tag string, viewer *uu
 	return Page{Items: items, NextCursor: nextCursor(items)}, nil
 }
 
-// SearchYaps: full-text search over yap content.
+// SearchYaps matches substrings and ranks by relevance (exact > prefix > contains > trigram).
 func (r *Repository) SearchYaps(ctx context.Context, q string, viewer *uuid.UUID, cursor string, limit int) (Page, error) {
 	limit = clampLimit(limit)
-	items, err := r.query(ctx, viewer, `
+	q = strings.TrimSpace(q)
+	if q == "" {
+		return Page{}, nil
+	}
+	offset := decodeSearchOffset(cursor)
+	pattern := sqlutil.ContainsPattern(q)
+	rows, err := r.pool.Query(ctx, `
+		WITH ranked AS (
+			SELECT y.id,
+				(
+					CASE
+						WHEN lower(y.content) = lower($2) THEN 1000.0
+						WHEN lower(y.content) LIKE lower($2) || '%' THEN 800.0
+						WHEN lower(y.content) LIKE $3 ESCAPE '\' THEN 500.0
+						ELSE 0.0
+					END
+					+ GREATEST(
+						word_similarity(lower($2), lower(y.content)),
+						similarity(lower(y.content), lower($2))
+					) * 200.0
+				) AS score,
+				y.created_at
+			FROM yaps y
+			WHERE lower(y.content) LIKE $3 ESCAPE '\'
+			   OR word_similarity(lower($2), lower(y.content)) > 0.2
+			   OR similarity(lower(y.content), lower($2)) > 0.12
+		)
 		SELECT `+yapCols+`
-		FROM yaps y JOIN users a ON a.id = y.author_id
-		WHERE y.search_vector @@ plainto_tsquery('simple', $2) AND y.created_at < $3
-		ORDER BY y.created_at DESC
-		LIMIT $4`, q, cursorOrFuture(cursor), limit)
+		FROM ranked r
+		JOIN yaps y ON y.id = r.id
+		JOIN users a ON a.id = y.author_id
+		ORDER BY r.score DESC, r.created_at DESC
+		OFFSET $4 LIMIT $5`,
+		viewer, q, pattern, offset, limit)
 	if err != nil {
 		return Page{}, err
 	}
-	return Page{Items: items, NextCursor: nextCursor(items)}, nil
+	defer rows.Close()
+	var items []Yap
+	for rows.Next() {
+		y, err := r.scanYap(rows)
+		if err != nil {
+			return Page{}, err
+		}
+		items = append(items, y)
+	}
+	if err := rows.Err(); err != nil {
+		return Page{}, err
+	}
+	if err := r.enrich(ctx, viewer, items); err != nil {
+		return Page{}, err
+	}
+	return Page{Items: items, NextCursor: nextSearchOffsetCursor(offset, len(items), limit)}, nil
+}
+
+func decodeSearchOffset(cursor string) int {
+	if !strings.HasPrefix(cursor, "s:") {
+		return 0
+	}
+	n, err := strconv.Atoi(cursor[2:])
+	if err != nil || n < 0 {
+		return 0
+	}
+	return n
+}
+
+func nextSearchOffsetCursor(offset, count, limit int) *string {
+	if count < limit {
+		return nil
+	}
+	s := fmt.Sprintf("s:%d", offset+count)
+	return &s
 }

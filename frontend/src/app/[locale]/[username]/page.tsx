@@ -77,16 +77,16 @@ export default function ProfilePage() {
 
       {profile && (
         <>
-          <div className="h-40 w-full bg-line">
+          <div className="relative z-0 h-44 w-full overflow-hidden bg-line">
             {profile.headerUrl && (
               // eslint-disable-next-line @next/next/no-img-element
-              <img src={profile.headerUrl} alt="" className="h-40 w-full object-cover" />
+              <img src={profile.headerUrl} alt="" className="h-full w-full object-cover object-top" />
             )}
           </div>
-          <div className="px-4 pb-3">
+          <div className="relative z-20 px-4 pb-3">
             <div className="flex items-end justify-between">
               <div className="-mt-12">
-                <Avatar url={profile.avatarUrl} name={name} size={96} className="border-4 border-white" />
+                <Avatar url={profile.avatarUrl} name={name} size={96} className="border-4 border-white bg-white" />
               </div>
               <div className="mt-3 flex gap-2">
                 {isMe ? (

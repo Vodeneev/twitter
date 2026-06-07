@@ -14,7 +14,7 @@ export function generateStaticParams() {
 export const metadata: Metadata = {
   title: 'Yapper',
   description: 'Yapper — чирикай, как хочешь. A Twitter-style microblog.',
-  themeColor: '#FFCC00',
+  themeColor: '#FC3F1D',
 };
 
 export default async function LocaleLayout({

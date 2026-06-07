@@ -5,6 +5,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/Vodeneev/twitter/backend/internal/sqlutil"
 	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5"
 )
@@ -80,13 +81,31 @@ func (r *UserRepository) Search(ctx context.Context, q string, viewer *uuid.UUID
 	if q == "" {
 		return nil, nil
 	}
-	pattern := "%" + strings.ToLower(q) + "%"
+	pattern := sqlutil.ContainsPattern(q)
 	return r.collect(ctx, viewer, `
 		SELECT `+userColsWithFollow+`
 		FROM users u
-		WHERE u.is_banned = FALSE AND (lower(u.username) LIKE $2 OR lower(u.display_name) LIKE $2)
-		ORDER BY u.followers_count DESC
-		LIMIT $3`, pattern, limit)
+		WHERE u.is_banned = FALSE AND (
+			lower(u.username) LIKE $3 ESCAPE '\'
+			OR lower(COALESCE(u.display_name, '')) LIKE $3 ESCAPE '\'
+			OR word_similarity(lower($2), lower(u.username)) > 0.2
+			OR word_similarity(lower($2), lower(COALESCE(u.display_name, ''))) > 0.2
+		)
+		ORDER BY
+			CASE
+				WHEN lower(u.username) = lower($2) THEN 0
+				WHEN lower(u.username) LIKE lower($2) || '%' THEN 1
+				WHEN lower(COALESCE(u.display_name, '')) LIKE lower($2) || '%' THEN 2
+				WHEN lower(u.username) LIKE $3 ESCAPE '\' THEN 3
+				WHEN lower(COALESCE(u.display_name, '')) LIKE $3 ESCAPE '\' THEN 4
+				ELSE 5
+			END,
+			GREATEST(
+				word_similarity(lower($2), lower(u.username)),
+				word_similarity(lower($2), lower(COALESCE(u.display_name, '')))
+			) DESC,
+			u.followers_count DESC
+		LIMIT $4`, q, pattern, limit)
 }
 
 func (r *UserRepository) Followers(ctx context.Context, userID uuid.UUID, viewer *uuid.UUID, limit int) ([]*User, error) {

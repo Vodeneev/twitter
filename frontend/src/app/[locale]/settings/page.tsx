@@ -65,19 +65,19 @@ function SettingsInner() {
 
   return (
     <div className="pb-10">
-      <div className="relative h-40 w-full bg-line">
+      <div className="relative z-0 h-44 w-full overflow-hidden bg-line">
         {headerPreview && (
           // eslint-disable-next-line @next/next/no-img-element
-          <img src={headerPreview} alt="" className="h-40 w-full object-cover" />
+          <img src={headerPreview} alt="" className="h-full w-full object-cover object-top" />
         )}
-        <button onClick={() => headerRef.current?.click()} className="absolute inset-0 flex items-center justify-center bg-black/30 text-sm font-semibold text-white">
+        <button onClick={() => headerRef.current?.click()} className="absolute inset-0 z-10 flex items-center justify-center bg-black/30 text-sm font-semibold text-white">
           {t('header')}
         </button>
         <input ref={headerRef} type="file" accept="image/*" hidden onChange={(e) => e.target.files?.[0] && upload(e.target.files[0], 'header')} />
       </div>
-      <div className="px-4">
+      <div className="relative z-20 px-4">
         <button onClick={() => avatarRef.current?.click()} className="-mt-12 block rounded-full">
-          <Avatar url={avatarPreview} name={displayName || user.username} size={96} className="border-4 border-white" />
+          <Avatar url={avatarPreview} name={displayName || user.username} size={96} className="border-4 border-white bg-white" />
         </button>
         <input ref={avatarRef} type="file" accept="image/*" hidden onChange={(e) => e.target.files?.[0] && upload(e.target.files[0], 'avatar')} />
 
