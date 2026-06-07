@@ -32,7 +32,7 @@ function SearchInner() {
   return (
     <AppShell>
       <PageHeader title={t('title')} subtitle={q ? `“${q}”` : undefined} back />
-      <div className="border-b border-line p-3 lg:hidden">
+      <div className="border-b border-line p-3">
         <SearchBox initial={q} />
       </div>
       <Tabs<Tab>

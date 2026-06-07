@@ -70,7 +70,7 @@ export function AppShell({ children, rightRail = true }: { children: React.React
 
   const items: NavItem[] = [
     { href: '/', label: t('home'), icon: (a) => <HomeIcon className="h-7 w-7" filled={a} /> },
-    { href: '/explore', label: t('explore'), icon: () => <ExploreIcon className="h-7 w-7" /> },
+    { href: '/search', label: t('search'), icon: () => <ExploreIcon className="h-7 w-7" /> },
     { href: '/notifications', label: t('notifications'), icon: (a) => <BellIcon className="h-7 w-7" filled={a} />, badge: unreadNotif, authOnly: true },
     { href: '/messages', label: t('messages'), icon: (a) => <MailIcon className="h-7 w-7" filled={a} />, badge: unreadMsg, authOnly: true },
     { href: '/bookmarks', label: t('bookmarks'), icon: (a) => <BookmarkIcon className="h-7 w-7" filled={a} />, authOnly: true },
