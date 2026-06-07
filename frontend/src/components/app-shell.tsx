@@ -85,7 +85,7 @@ export function AppShell({ children, rightRail = true }: { children: React.React
   return (
     <div className="mx-auto flex min-h-screen w-full max-w-[1280px] justify-center gap-2 px-2">
       {/* Left sidebar */}
-      <header className="sticky top-0 hidden h-screen shrink-0 flex-col justify-between py-3 sm:flex sm:w-[88px] xl:w-[260px]">
+      <header className="sticky top-0 flex h-screen w-[68px] shrink-0 flex-col justify-between py-3 sm:w-[88px] xl:w-[260px]">
         <div className="flex flex-col gap-1">
           <Link href="/" className="mb-2 px-3">
             <YapperLogo wordmarkClassName="hidden text-2xl xl:inline" />
@@ -134,7 +134,7 @@ export function AppShell({ children, rightRail = true }: { children: React.React
               type="button"
               onClick={async () => {
                 await logout();
-                router.push('/login');
+                router.push('/');
               }}
               className="hidden rounded-full px-3 py-2 text-left text-[15px] text-muted transition hover:bg-gray-100 hover:text-ink xl:block"
             >
@@ -154,7 +154,7 @@ export function AppShell({ children, rightRail = true }: { children: React.React
       </header>
 
       {/* Main column */}
-      <main className="min-h-screen w-full max-w-feed border-x border-line">{children}</main>
+      <main className="min-h-screen min-w-0 flex-1 max-w-feed border-x border-line">{children}</main>
 
       {/* Right rail */}
       {rightRail && (
@@ -164,17 +164,6 @@ export function AppShell({ children, rightRail = true }: { children: React.React
         </aside>
       )}
 
-      {/* Mobile bottom nav */}
-      <nav className="fixed bottom-0 left-0 right-0 z-20 flex items-center justify-around border-t border-line bg-white py-2 sm:hidden">
-        {items
-          .filter((it) => !it.authOnly || user)
-          .map((it) => (
-            <Link key={it.href} href={it.href} className="relative p-2">
-              {it.icon(isActive(it.href))}
-              {it.badge ? <span className="absolute right-0 top-0 h-2 w-2 rounded-full bg-brand" /> : null}
-            </Link>
-          ))}
-      </nav>
     </div>
   );
 }

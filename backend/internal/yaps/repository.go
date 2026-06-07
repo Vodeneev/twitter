@@ -307,8 +307,8 @@ func decodeCursor(cursor string) (time.Time, bool) {
 	return t, true
 }
 
-func nextCursor(items []Yap) *string {
-	if len(items) == 0 {
+func nextCursor(items []Yap, limit int) *string {
+	if len(items) == 0 || len(items) < limit {
 		return nil
 	}
 	last := items[len(items)-1]

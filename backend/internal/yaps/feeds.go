@@ -118,7 +118,7 @@ func (r *Repository) HomeTimeline(ctx context.Context, viewer uuid.UUID, cursor 
 	if err != nil {
 		return Page{}, err
 	}
-	return Page{Items: items, NextCursor: nextCursor(items)}, nil
+	return Page{Items: items, NextCursor: nextCursor(items, limit)}, nil
 }
 
 // GlobalTimeline: newest top-level yaps from everyone ("explore").
@@ -147,7 +147,7 @@ func (r *Repository) GlobalTimeline(ctx context.Context, viewer *uuid.UUID, curs
 	if err != nil {
 		return Page{}, err
 	}
-	return Page{Items: items, NextCursor: nextCursor(items)}, nil
+	return Page{Items: items, NextCursor: nextCursor(items, limit)}, nil
 }
 
 // UserYaps: a profile's top-level yaps and reposts.
@@ -170,7 +170,7 @@ func (r *Repository) UserYaps(ctx context.Context, owner uuid.UUID, viewer *uuid
 	if err != nil {
 		return Page{}, err
 	}
-	return Page{Items: items, NextCursor: nextCursor(items)}, nil
+	return Page{Items: items, NextCursor: nextCursor(items, limit)}, nil
 }
 
 // UserReplies: a profile's replies.
@@ -190,7 +190,7 @@ func (r *Repository) UserReplies(ctx context.Context, owner uuid.UUID, viewer *u
 	if err != nil {
 		return Page{}, err
 	}
-	return Page{Items: items, NextCursor: nextCursor(items)}, nil
+	return Page{Items: items, NextCursor: nextCursor(items, limit)}, nil
 }
 
 // UserMedia: a profile's yaps that include media.
@@ -211,7 +211,7 @@ func (r *Repository) UserMedia(ctx context.Context, owner uuid.UUID, viewer *uui
 	if err != nil {
 		return Page{}, err
 	}
-	return Page{Items: items, NextCursor: nextCursor(items)}, nil
+	return Page{Items: items, NextCursor: nextCursor(items, limit)}, nil
 }
 
 // UserLikes: yaps the profile owner has liked.
@@ -231,7 +231,7 @@ func (r *Repository) UserLikes(ctx context.Context, owner uuid.UUID, viewer *uui
 	if err != nil {
 		return Page{}, err
 	}
-	return Page{Items: items, NextCursor: nextCursor(items)}, nil
+	return Page{Items: items, NextCursor: nextCursor(items, limit)}, nil
 }
 
 // Bookmarks: yaps the viewer bookmarked.
@@ -251,7 +251,7 @@ func (r *Repository) Bookmarks(ctx context.Context, viewer uuid.UUID, cursor str
 	if err != nil {
 		return Page{}, err
 	}
-	return Page{Items: items, NextCursor: nextCursor(items)}, nil
+	return Page{Items: items, NextCursor: nextCursor(items, limit)}, nil
 }
 
 // Replies returns direct replies to a yap, oldest first.
@@ -270,7 +270,7 @@ func (r *Repository) Replies(ctx context.Context, yapID uuid.UUID, viewer *uuid.
 	if err != nil {
 		return Page{}, err
 	}
-	return Page{Items: items, NextCursor: nextCursor(items)}, nil
+	return Page{Items: items, NextCursor: nextCursor(items, limit)}, nil
 }
 
 // Ancestors walks the parent chain of a yap, root-first (for thread context).
@@ -309,7 +309,7 @@ func (r *Repository) HashtagTimeline(ctx context.Context, tag string, viewer *uu
 	if err != nil {
 		return Page{}, err
 	}
-	return Page{Items: items, NextCursor: nextCursor(items)}, nil
+	return Page{Items: items, NextCursor: nextCursor(items, limit)}, nil
 }
 
 // SearchYaps matches substrings and ranks by relevance (exact > prefix > contains > trigram).

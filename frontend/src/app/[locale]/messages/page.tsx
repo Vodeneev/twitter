@@ -85,7 +85,7 @@ function MessagesInner() {
 
   if (active) {
     return (
-      <div className="fixed inset-x-0 bottom-14 top-0 z-30 flex flex-col bg-white sm:static sm:z-auto sm:h-[min(42rem,calc(100dvh-6rem))]">
+      <div className="flex h-[min(42rem,calc(100dvh-2rem))] flex-col">
         <div className="flex shrink-0 items-center gap-3 border-b border-line px-4 py-3">
           <button onClick={() => setActive(null)} className="rounded-full p-1.5 hover:bg-gray-100">
             ←

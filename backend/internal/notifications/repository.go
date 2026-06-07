@@ -141,7 +141,7 @@ func (r *Repository) List(ctx context.Context, userID uuid.UUID, cursor string, 
 		return Page{}, err
 	}
 	var next *string
-	if len(items) > 0 {
+	if len(items) >= limit {
 		s := items[len(items)-1].CreatedAt.UTC().Format(time.RFC3339Nano)
 		next = &s
 	}

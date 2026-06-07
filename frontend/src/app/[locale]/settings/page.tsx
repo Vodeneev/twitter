@@ -111,7 +111,7 @@ function SettingsInner() {
             type="button"
             onClick={async () => {
               await logout();
-              router.push('/login');
+              router.push('/');
             }}
             className="btn-outline mt-2 w-full border-red-200 text-red-600 hover:bg-red-50"
           >
