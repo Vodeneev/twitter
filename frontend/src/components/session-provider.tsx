@@ -1,6 +1,7 @@
 'use client';
 
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import { useRouter } from '@/i18n/navigation';
 import { api } from '@/lib/api';
 import type { User } from '@/lib/types';
 
@@ -15,6 +16,7 @@ interface SessionValue {
 const SessionContext = createContext<SessionValue | null>(null);
 
 export function SessionProvider({ children }: { children: React.ReactNode }) {
+  const router = useRouter();
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -30,12 +32,13 @@ export function SessionProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const logout = useCallback(async () => {
+    router.replace('/');
     try {
       await api.logout();
     } finally {
       setUser(null);
     }
-  }, []);
+  }, [router]);
 
   useEffect(() => {
     void refresh();

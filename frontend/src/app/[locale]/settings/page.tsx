@@ -2,7 +2,6 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { useTranslations } from 'next-intl';
-import { useRouter } from '@/i18n/navigation';
 import { AppShell } from '@/components/app-shell';
 import { PageHeader } from '@/components/page-header';
 import { RequireAuth } from '@/components/require-auth';
@@ -13,7 +12,6 @@ import { api, uploadToStorage } from '@/lib/api';
 function SettingsInner() {
   const t = useTranslations('settings');
   const tn = useTranslations('nav');
-  const router = useRouter();
   const { user, setUser, refresh, logout } = useSession();
   const [displayName, setDisplayName] = useState('');
   const [bio, setBio] = useState('');
@@ -109,10 +107,7 @@ function SettingsInner() {
           </div>
           <button
             type="button"
-            onClick={async () => {
-              await logout();
-              router.push('/');
-            }}
+            onClick={() => void logout()}
             className="btn-outline mt-2 w-full border-red-200 text-red-600 hover:bg-red-50"
           >
             {tn('logout')}

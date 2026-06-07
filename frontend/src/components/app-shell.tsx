@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useState } from 'react';
 import { useTranslations } from 'next-intl';
-import { Link, usePathname, useRouter } from '@/i18n/navigation';
+import { Link, usePathname } from '@/i18n/navigation';
 import { useSession } from './session-provider';
 import { useRealtime, type RealtimeEvent } from '@/hooks/use-realtime';
 import { api } from '@/lib/api';
@@ -13,6 +13,7 @@ import {
   ExploreIcon,
   HomeIcon,
   MailIcon,
+  LogoutIcon,
   SettingsIcon,
   UserIcon,
 } from './icons';
@@ -32,7 +33,6 @@ export function AppShell({ children, rightRail = true }: { children: React.React
   const t = useTranslations('nav');
   const tb = useTranslations('brand');
   const pathname = usePathname();
-  const router = useRouter();
   const { user, logout } = useSession();
   const [unreadNotif, setUnreadNotif] = useState(0);
   const [unreadMsg, setUnreadMsg] = useState(0);
@@ -83,12 +83,12 @@ export function AppShell({ children, rightRail = true }: { children: React.React
   const isActive = (href: string) => (href === '/' ? pathname === '/' : pathname.startsWith(href));
 
   return (
-    <div className="mx-auto flex min-h-screen w-full max-w-[1280px] justify-center gap-2 px-2">
+    <div className="mx-auto flex min-h-screen w-full max-w-[1280px] justify-center gap-1 px-0 sm:gap-2 sm:px-2">
       {/* Left sidebar */}
-      <header className="sticky top-0 flex h-screen w-[68px] shrink-0 flex-col justify-between py-3 sm:w-[88px] xl:w-[260px]">
-        <div className="flex flex-col gap-1">
-          <Link href="/" className="mb-2 px-3">
-            <YapperLogo wordmarkClassName="hidden text-2xl xl:inline" />
+      <header className="sticky top-0 flex h-screen w-[50px] shrink-0 flex-col justify-between py-2 sm:w-[72px] sm:py-3 xl:w-[260px]">
+        <div className="flex flex-col gap-0.5 sm:gap-1">
+          <Link href="/" className="mb-1 flex justify-center px-1 sm:mb-2 xl:justify-start xl:px-3">
+            <YapperLogo iconClassName="h-7 w-7 sm:h-9 sm:w-9" wordmarkClassName="hidden text-2xl xl:inline" />
           </Link>
           {items
             .filter((it) => !it.authOnly || user)
@@ -98,11 +98,11 @@ export function AppShell({ children, rightRail = true }: { children: React.React
                 <Link
                   key={it.href}
                   href={it.href}
-                  className={`relative flex items-center gap-4 rounded-full px-3 py-2.5 text-xl transition hover:bg-gray-100 ${
+                  className={`relative flex items-center justify-center gap-4 rounded-full p-2 transition hover:bg-gray-100 xl:justify-start xl:px-3 xl:py-2.5 ${
                     active ? 'font-extrabold' : 'font-normal'
                   }`}
                 >
-                  <span className="relative">
+                  <span className="relative [&_svg]:h-6 [&_svg]:w-6 xl:[&_svg]:h-7 xl:[&_svg]:w-7">
                     {it.icon(active)}
                     {it.badge ? (
                       <span className="absolute -right-1.5 -top-1.5 min-w-[18px] rounded-full bg-brand px-1 text-center text-[11px] font-bold leading-[18px] text-white">
@@ -122,9 +122,10 @@ export function AppShell({ children, rightRail = true }: { children: React.React
         </div>
 
         {user ? (
-          <div className="flex flex-col gap-2 px-2 pb-2">
-            <Link href={`/${user.username}`} className="flex min-w-0 items-center gap-2 rounded-full p-1 hover:bg-gray-100">
-              <Avatar url={user.avatarUrl} name={user.displayName || user.username} size={40} />
+          <div className="flex flex-col gap-2 px-1 pb-2 xl:px-2">
+            <Link href={`/${user.username}`} className="flex min-w-0 items-center justify-center gap-2 rounded-full p-1 hover:bg-gray-100 xl:justify-start">
+              <Avatar url={user.avatarUrl} name={user.displayName || user.username} size={32} className="xl:hidden" />
+              <Avatar url={user.avatarUrl} name={user.displayName || user.username} size={40} className="hidden xl:block" />
               <span className="hidden min-w-0 xl:block">
                 <span className="block truncate font-bold">{user.displayName || user.username}</span>
                 <span className="block truncate text-sm text-muted">@{user.username}</span>
@@ -132,13 +133,15 @@ export function AppShell({ children, rightRail = true }: { children: React.React
             </Link>
             <button
               type="button"
-              onClick={async () => {
-                await logout();
-                router.push('/');
-              }}
-              className="hidden rounded-full px-3 py-2 text-left text-[15px] text-muted transition hover:bg-gray-100 hover:text-ink xl:block"
+              onClick={() => void logout()}
+              className="rounded-full p-2 text-muted transition hover:bg-gray-100 hover:text-ink xl:px-3 xl:py-2 xl:text-left xl:text-[15px]"
+              aria-label={t('logout')}
+              title={t('logout')}
             >
-              {t('logout')}
+              <span className="xl:hidden">
+                <LogoutIcon className="h-6 w-6" />
+              </span>
+              <span className="hidden xl:inline">{t('logout')}</span>
             </button>
           </div>
         ) : (
