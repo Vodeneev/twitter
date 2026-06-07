@@ -56,4 +56,7 @@ jobs:
               fi
             fi
 
-            docker compose -f docker-compose.prod.yml --env-file .env.prod up -d --build migrate backend frontend caddy
+            docker compose -f docker-compose.prod.yml --env-file .env.prod up -d --build migrate backend frontend
+            # Force-recreate Caddy so a changed Caddyfile (replaced by git pull,
+            # new inode) is re-mounted rather than kept stale by the bind mount.
+            docker compose -f docker-compose.prod.yml --env-file .env.prod up -d --force-recreate caddy
