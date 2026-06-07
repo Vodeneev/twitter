@@ -17,6 +17,12 @@ export const metadata: Metadata = {
   themeColor: '#FC3F1D',
 };
 
+export const viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  viewportFit: 'cover' as const,
+};
+
 export default async function LocaleLayout({
   children,
   params: { locale },

@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { Link, usePathname } from '@/i18n/navigation';
 import { useSession } from './session-provider';
@@ -12,8 +12,9 @@ import {
   BookmarkIcon,
   ExploreIcon,
   HomeIcon,
-  MailIcon,
+  LoginIcon,
   LogoutIcon,
+  MailIcon,
   SettingsIcon,
   UserIcon,
 } from './icons';
@@ -26,7 +27,6 @@ interface NavItem {
   label: string;
   icon: (active: boolean) => React.ReactNode;
   badge?: number;
-  authOnly?: boolean;
 }
 
 export function AppShell({ children, rightRail = true }: { children: React.ReactNode; rightRail?: boolean }) {
@@ -70,59 +70,71 @@ export function AppShell({ children, rightRail = true }: { children: React.React
     if (pathname.startsWith('/messages')) void loadCounts();
   }, [pathname, loadCounts]);
 
-  const items: NavItem[] = [
-    { href: '/', label: t('home'), icon: (a) => <HomeIcon className="h-7 w-7" filled={a} /> },
-    { href: '/search', label: t('search'), icon: () => <ExploreIcon className="h-7 w-7" /> },
-    { href: '/notifications', label: t('notifications'), icon: (a) => <BellIcon className="h-7 w-7" filled={a} />, badge: unreadNotif, authOnly: true },
-    { href: '/messages', label: t('messages'), icon: (a) => <MailIcon className="h-7 w-7" filled={a} />, badge: unreadMsg, authOnly: true },
-    { href: '/bookmarks', label: t('bookmarks'), icon: (a) => <BookmarkIcon className="h-7 w-7" filled={a} />, authOnly: true },
-    { href: user ? `/${user.username}` : '/login', label: t('profile'), icon: (a) => <UserIcon className="h-7 w-7" filled={a} />, authOnly: true },
-    { href: '/settings', label: t('settings'), icon: () => <SettingsIcon className="h-7 w-7" />, authOnly: true },
-  ];
+  const items: NavItem[] = useMemo(() => {
+    const base: NavItem[] = [
+      { href: '/', label: t('home'), icon: (a) => <HomeIcon className="h-7 w-7" filled={a} /> },
+      { href: '/search', label: t('search'), icon: () => <ExploreIcon className="h-7 w-7" /> },
+    ];
+    if (!user) {
+      return [
+        ...base,
+        { href: '/login', label: t('login'), icon: () => <LoginIcon className="h-7 w-7" /> },
+        { href: '/register', label: t('register'), icon: () => <UserIcon className="h-7 w-7" /> },
+      ];
+    }
+    return [
+      ...base,
+      { href: '/notifications', label: t('notifications'), icon: (a) => <BellIcon className="h-7 w-7" filled={a} />, badge: unreadNotif },
+      { href: '/messages', label: t('messages'), icon: (a) => <MailIcon className="h-7 w-7" filled={a} />, badge: unreadMsg },
+      { href: '/bookmarks', label: t('bookmarks'), icon: (a) => <BookmarkIcon className="h-7 w-7" filled={a} /> },
+      { href: `/${user.username}`, label: t('profile'), icon: (a) => <UserIcon className="h-7 w-7" filled={a} /> },
+      { href: '/settings', label: t('settings'), icon: () => <SettingsIcon className="h-7 w-7" /> },
+    ];
+  }, [t, user, unreadNotif, unreadMsg]);
 
   const isActive = (href: string) => (href === '/' ? pathname === '/' : pathname.startsWith(href));
+
+  const footerPad = 'pb-[max(0.75rem,env(safe-area-inset-bottom))]';
 
   return (
     <div className="mx-auto flex min-h-screen w-full max-w-[1280px] justify-center gap-1 px-0 sm:gap-2 sm:px-2">
       {/* Left sidebar */}
-      <header className="sticky top-0 flex h-screen w-[50px] shrink-0 flex-col justify-between py-2 sm:w-[72px] sm:py-3 xl:w-[260px]">
-        <div className="flex flex-col gap-0.5 sm:gap-1">
-          <Link href="/" className="mb-1 flex justify-center px-1 sm:mb-2 xl:justify-start xl:px-3">
+      <header className="sticky top-0 flex h-dvh max-h-dvh w-[50px] shrink-0 flex-col py-2 sm:w-[72px] sm:py-3 xl:w-[260px]">
+        <div className="flex min-h-0 flex-1 flex-col gap-0.5 overflow-y-auto sm:gap-1">
+          <Link href="/" className="mb-1 flex shrink-0 justify-center px-1 sm:mb-2 xl:justify-start xl:px-3">
             <YapperLogo iconClassName="h-7 w-7 sm:h-9 sm:w-9" wordmarkClassName="hidden text-2xl xl:inline" />
           </Link>
-          {items
-            .filter((it) => !it.authOnly || user)
-            .map((it) => {
-              const active = isActive(it.href);
-              return (
-                <Link
-                  key={it.href}
-                  href={it.href}
-                  className={`relative flex items-center justify-center gap-4 rounded-full p-2 transition hover:bg-gray-100 xl:justify-start xl:px-3 xl:py-2.5 ${
-                    active ? 'font-extrabold' : 'font-normal'
-                  }`}
-                >
-                  <span className="relative [&_svg]:h-6 [&_svg]:w-6 xl:[&_svg]:h-7 xl:[&_svg]:w-7">
-                    {it.icon(active)}
-                    {it.badge ? (
-                      <span className="absolute -right-1.5 -top-1.5 min-w-[18px] rounded-full bg-brand px-1 text-center text-[11px] font-bold leading-[18px] text-white">
-                        {it.badge > 99 ? '99+' : it.badge}
-                      </span>
-                    ) : null}
-                  </span>
-                  <span className="hidden xl:inline">{it.label}</span>
-                </Link>
-              );
-            })}
+          {items.map((it) => {
+            const active = isActive(it.href);
+            return (
+              <Link
+                key={it.href}
+                href={it.href}
+                className={`relative flex shrink-0 items-center justify-center gap-4 rounded-full p-2 transition hover:bg-gray-100 xl:justify-start xl:px-3 xl:py-2.5 ${
+                  active ? 'font-extrabold' : 'font-normal'
+                }`}
+              >
+                <span className="relative [&_svg]:h-6 [&_svg]:w-6 xl:[&_svg]:h-7 xl:[&_svg]:w-7">
+                  {it.icon(active)}
+                  {it.badge ? (
+                    <span className="absolute -right-1.5 -top-1.5 min-w-[18px] rounded-full bg-brand px-1 text-center text-[11px] font-bold leading-[18px] text-white">
+                      {it.badge > 99 ? '99+' : it.badge}
+                    </span>
+                  ) : null}
+                </span>
+                <span className="hidden xl:inline">{it.label}</span>
+              </Link>
+            );
+          })}
           {user && (
-            <Link href="/" className="btn-primary mt-3 hidden h-12 text-lg xl:flex">
+            <Link href="/" className="btn-primary mt-3 hidden h-12 shrink-0 text-lg xl:flex">
               {tb('name')}
             </Link>
           )}
         </div>
 
         {user ? (
-          <div className="flex flex-col gap-2 px-1 pb-2 xl:px-2">
+          <div className={`mt-2 flex shrink-0 flex-col gap-2 border-t border-line px-1 pt-2 xl:px-2 ${footerPad}`}>
             <Link href={`/${user.username}`} className="flex min-w-0 items-center justify-center gap-2 rounded-full p-1 hover:bg-gray-100 xl:justify-start">
               <Avatar url={user.avatarUrl} name={user.displayName || user.username} size={32} className="xl:hidden" />
               <Avatar url={user.avatarUrl} name={user.displayName || user.username} size={40} className="hidden xl:block" />
@@ -134,18 +146,16 @@ export function AppShell({ children, rightRail = true }: { children: React.React
             <button
               type="button"
               onClick={() => void logout()}
-              className="rounded-full p-2 text-muted transition hover:bg-gray-100 hover:text-ink xl:px-3 xl:py-2 xl:text-left xl:text-[15px]"
+              className="flex items-center justify-center rounded-full p-2 text-muted transition hover:bg-gray-100 hover:text-ink xl:justify-start xl:px-3 xl:py-2"
               aria-label={t('logout')}
               title={t('logout')}
             >
-              <span className="xl:hidden">
-                <LogoutIcon className="h-6 w-6" />
-              </span>
-              <span className="hidden xl:inline">{t('logout')}</span>
+              <LogoutIcon className="h-6 w-6 xl:mr-0" />
+              <span className="hidden xl:ml-3 xl:inline xl:text-[15px]">{t('logout')}</span>
             </button>
           </div>
         ) : (
-          <div className="hidden flex-col gap-2 px-2 pb-2 xl:flex">
+          <div className={`mt-2 hidden shrink-0 flex-col gap-2 border-t border-line px-2 pt-2 xl:flex ${footerPad}`}>
             <Link href="/login" className="btn-outline">
               {t('login')}
             </Link>
@@ -166,7 +176,6 @@ export function AppShell({ children, rightRail = true }: { children: React.React
           {user && <Suggestions />}
         </aside>
       )}
-
     </div>
   );
 }
