@@ -96,7 +96,8 @@
     "newMessage": "New message",
     "placeholder": "Start a new message…",
     "send": "Send",
-    "selectConversation": "Select a conversation"
+    "selectConversation": "Select a conversation",
+    "startChat": "Say hello — write the first message"
   },
   "bookmarks": { "title": "Bookmarks", "empty": "You haven't bookmarked anything yet" },
   "suggestions": { "title": "Who to follow", "showMore": "Show more" },

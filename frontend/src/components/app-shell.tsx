@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useState } from 'react';
 import { useTranslations } from 'next-intl';
-import { Link, usePathname } from '@/i18n/navigation';
+import { Link, usePathname, useRouter } from '@/i18n/navigation';
 import { useSession } from './session-provider';
 import { useRealtime, type RealtimeEvent } from '@/hooks/use-realtime';
 import { api } from '@/lib/api';
@@ -13,6 +13,7 @@ import {
   ExploreIcon,
   HomeIcon,
   MailIcon,
+  SettingsIcon,
   UserIcon,
 } from './icons';
 import { YapperLogo } from './brand-logo';
@@ -31,7 +32,8 @@ export function AppShell({ children, rightRail = true }: { children: React.React
   const t = useTranslations('nav');
   const tb = useTranslations('brand');
   const pathname = usePathname();
-  const { user } = useSession();
+  const router = useRouter();
+  const { user, logout } = useSession();
   const [unreadNotif, setUnreadNotif] = useState(0);
   const [unreadMsg, setUnreadMsg] = useState(0);
 
@@ -75,6 +77,7 @@ export function AppShell({ children, rightRail = true }: { children: React.React
     { href: '/messages', label: t('messages'), icon: (a) => <MailIcon className="h-7 w-7" filled={a} />, badge: unreadMsg, authOnly: true },
     { href: '/bookmarks', label: t('bookmarks'), icon: (a) => <BookmarkIcon className="h-7 w-7" filled={a} />, authOnly: true },
     { href: user ? `/${user.username}` : '/login', label: t('profile'), icon: (a) => <UserIcon className="h-7 w-7" filled={a} />, authOnly: true },
+    { href: '/settings', label: t('settings'), icon: () => <SettingsIcon className="h-7 w-7" />, authOnly: true },
   ];
 
   const isActive = (href: string) => (href === '/' ? pathname === '/' : pathname.startsWith(href));
@@ -119,14 +122,24 @@ export function AppShell({ children, rightRail = true }: { children: React.React
         </div>
 
         {user ? (
-          <div className="flex items-center justify-between gap-2 px-2 pb-2">
-            <Link href={`/${user.username}`} className="flex min-w-0 items-center gap-2">
+          <div className="flex flex-col gap-2 px-2 pb-2">
+            <Link href={`/${user.username}`} className="flex min-w-0 items-center gap-2 rounded-full p-1 hover:bg-gray-100">
               <Avatar url={user.avatarUrl} name={user.displayName || user.username} size={40} />
               <span className="hidden min-w-0 xl:block">
                 <span className="block truncate font-bold">{user.displayName || user.username}</span>
                 <span className="block truncate text-sm text-muted">@{user.username}</span>
               </span>
             </Link>
+            <button
+              type="button"
+              onClick={async () => {
+                await logout();
+                router.push('/login');
+              }}
+              className="hidden rounded-full px-3 py-2 text-left text-[15px] text-muted transition hover:bg-gray-100 hover:text-ink xl:block"
+            >
+              {t('logout')}
+            </button>
           </div>
         ) : (
           <div className="hidden flex-col gap-2 px-2 pb-2 xl:flex">

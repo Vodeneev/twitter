@@ -10,7 +10,7 @@ import { Avatar } from '@/components/avatar';
 import { useSession } from '@/components/session-provider';
 import { useRealtime, type RealtimeEvent } from '@/hooks/use-realtime';
 import { api } from '@/lib/api';
-import { timeAgo } from '@/lib/format';
+import { formatConversationTime, formatMessageTime } from '@/lib/format';
 import type { Author, Conversation, Message } from '@/lib/types';
 
 export const dynamic = 'force-dynamic';
@@ -85,8 +85,8 @@ function MessagesInner() {
 
   if (active) {
     return (
-      <div className="flex h-[calc(100vh-0px)] flex-col">
-        <div className="flex items-center gap-3 border-b border-line px-4 py-3">
+      <div className="fixed inset-x-0 bottom-14 top-0 z-30 flex flex-col bg-white sm:static sm:z-auto sm:h-[min(42rem,calc(100dvh-6rem))]">
+        <div className="flex shrink-0 items-center gap-3 border-b border-line px-4 py-3">
           <button onClick={() => setActive(null)} className="rounded-full p-1.5 hover:bg-gray-100">
             ←
           </button>
@@ -96,23 +96,37 @@ function MessagesInner() {
             {active.other.username && <p className="text-sm text-muted">@{active.other.username}</p>}
           </div>
         </div>
-        <div className="flex-1 overflow-y-auto px-4 py-3">
-          {messages.map((m) => {
-            const mine = m.senderId === user?.id;
-            return (
-              <div key={m.id} className={`mb-2 flex ${mine ? 'justify-end' : 'justify-start'}`}>
-                <div className={`max-w-[75%] rounded-2xl px-4 py-2 ${mine ? 'bg-brand text-white' : 'bg-gray-100 text-ink'}`}>
-                  <p className="whitespace-pre-wrap break-words">{m.body}</p>
-                  <p className={`mt-0.5 text-right text-[11px] ${mine ? 'text-white/70' : 'text-muted'}`}>{timeAgo(m.createdAt, locale)}</p>
+
+        {messages.length === 0 ? (
+          <div className="flex flex-1 items-center justify-center px-6 text-center text-muted">
+            <p>{t('startChat')}</p>
+          </div>
+        ) : (
+          <div className="min-h-0 flex-1 overflow-y-auto px-4 py-3">
+            {messages.map((m) => {
+              const mine = m.senderId === user?.id;
+              return (
+                <div key={m.id} className={`mb-2 flex ${mine ? 'justify-end' : 'justify-start'}`}>
+                  <div className={`max-w-[75%] rounded-2xl px-4 py-2 ${mine ? 'bg-brand text-white' : 'bg-gray-100 text-ink'}`}>
+                    <p className="whitespace-pre-wrap break-words">{m.body}</p>
+                    <p className={`mt-0.5 text-right text-[11px] ${mine ? 'text-white/70' : 'text-muted'}`}>{formatMessageTime(m.createdAt, locale)}</p>
+                  </div>
                 </div>
-              </div>
-            );
-          })}
-          <div ref={endRef} />
-        </div>
-        <form onSubmit={send} className="flex items-center gap-2 border-t border-line p-3">
-          <input value={body} onChange={(e) => setBody(e.target.value)} placeholder={t('placeholder')} className="input rounded-full" />
-          <button type="submit" disabled={!body.trim()} className="btn-primary py-2">
+              );
+            })}
+            <div ref={endRef} />
+          </div>
+        )}
+
+        <form onSubmit={send} className="flex shrink-0 items-center gap-2 border-t border-line bg-white p-3">
+          <input
+            value={body}
+            onChange={(e) => setBody(e.target.value)}
+            placeholder={t('placeholder')}
+            className="input rounded-full"
+            autoFocus
+          />
+          <button type="submit" disabled={!body.trim()} className="btn-primary shrink-0 py-2">
             {t('send')}
           </button>
         </form>
@@ -121,10 +135,17 @@ function MessagesInner() {
   }
 
   if (conversations.length === 0) {
-    return <div className="px-6 py-12 text-center text-muted">{t('empty')}</div>;
+    return (
+      <>
+        <PageHeader title={t('title')} />
+        <div className="px-6 py-12 text-center text-muted">{t('empty')}</div>
+      </>
+    );
   }
 
   return (
+    <>
+    <PageHeader title={t('title')} />
     <ul>
       {conversations.map((c) => (
         <li key={c.id}>
@@ -133,7 +154,7 @@ function MessagesInner() {
             <div className="min-w-0 flex-1">
               <div className="flex items-center justify-between">
                 <span className="truncate font-bold">{c.other.displayName || c.other.username}</span>
-                <span className="shrink-0 text-sm text-muted">{timeAgo(c.lastMessageAt, locale)}</span>
+                <span className="shrink-0 text-sm text-muted">{formatConversationTime(c.lastMessageAt, locale)}</span>
               </div>
               <p className="truncate text-sm text-muted">{c.lastMessage?.body ?? ''}</p>
             </div>
@@ -142,14 +163,13 @@ function MessagesInner() {
         </li>
       ))}
     </ul>
+    </>
   );
 }
 
 export default function MessagesPage() {
-  const t = useTranslations('messages');
   return (
     <AppShell rightRail={false}>
-      <PageHeader title={t('title')} />
       <RequireAuth>
         <MessagesInner />
       </RequireAuth>

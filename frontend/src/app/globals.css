@@ -33,6 +33,15 @@ body {
   .input {
     @apply w-full rounded-md border border-gray-300 bg-white px-3 py-2 outline-none focus:border-brand;
   }
+  .alert-success {
+    @apply rounded-md border border-emerald-200 bg-emerald-50 px-3 py-3 text-center text-sm text-emerald-800;
+  }
+  .alert-info {
+    @apply rounded-md border border-gray-200 bg-gray-50 px-3 py-3 text-center text-sm text-ink;
+  }
+  .alert-error {
+    @apply rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700;
+  }
 }
 
 .no-scrollbar::-webkit-scrollbar {

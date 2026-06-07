@@ -29,8 +29,8 @@ function VerifyEmailInner() {
   return (
     <AuthCard title={t('loginTitle')}>
       {status === 'pending' && <p className="text-center text-muted">{t('verifying')}</p>}
-      {status === 'ok' && <p className="rounded-md bg-green-50 px-3 py-3 text-center text-green-700">{t('verified')}</p>}
-      {status === 'fail' && <p className="rounded-md bg-red-50 px-3 py-3 text-center text-red-600">{t('verifyFailed')}</p>}
+      {status === 'ok' && <p className="alert-success">{t('verified')}</p>}
+      {status === 'fail' && <p className="alert-error text-center">{t('verifyFailed')}</p>}
       <div className="mt-4 text-center text-sm">
         <Link href="/login" className="text-brand hover:underline">
           {t('loginButton')}

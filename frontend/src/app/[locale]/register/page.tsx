@@ -41,7 +41,7 @@ export default function RegisterPage() {
   if (done) {
     return (
       <AuthCard title={t('registerTitle')}>
-        <p className="rounded-md bg-brand/10 px-3 py-3 text-center text-brand">{t('checkEmail')}</p>
+        <p className="alert-success">{t('checkEmail')}</p>
         <div className="mt-4 text-center text-sm">
           <Link href="/login" className="text-brand hover:underline">
             {t('loginButton')}
@@ -54,7 +54,7 @@ export default function RegisterPage() {
   return (
     <AuthCard title={t('registerTitle')}>
       <form onSubmit={submit} className="flex flex-col gap-4">
-        {error && <p className="rounded-md bg-red-50 px-3 py-2 text-sm text-red-600">{error}</p>}
+        {error && <p className="alert-error">{error}</p>}
         <input className="input" placeholder={t('displayName')} value={displayName} onChange={(e) => setDisplayName(e.target.value)} required />
         <input className="input" placeholder={t('username')} value={username} onChange={(e) => setUsername(e.target.value)} pattern="[a-zA-Z0-9_]{3,20}" required />
         <input className="input" type="email" placeholder={t('email')} value={email} onChange={(e) => setEmail(e.target.value)} required />

@@ -96,7 +96,8 @@
     "newMessage": "Новое сообщение",
     "placeholder": "Напишите сообщение…",
     "send": "Отправить",
-    "selectConversation": "Выберите переписку"
+    "selectConversation": "Выберите переписку",
+    "startChat": "Напишите первое сообщение"
   },
   "bookmarks": { "title": "Закладки", "empty": "Вы ещё ничего не добавили в закладки" },
   "suggestions": { "title": "Кого читать", "showMore": "Показать ещё" },

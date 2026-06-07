@@ -17,6 +17,21 @@ export function formatDate(iso: string, locale: string): string {
   return new Date(iso).toLocaleDateString(locale, { day: 'numeric', month: 'long', year: 'numeric' });
 }
 
+/** Clock time for a message, e.g. 14:35. */
+export function formatMessageTime(iso: string, locale: string): string {
+  return new Date(iso).toLocaleTimeString(locale, { hour: '2-digit', minute: '2-digit' });
+}
+
+/** Time if today, otherwise a short date — for conversation lists. */
+export function formatConversationTime(iso: string, locale: string): string {
+  const d = new Date(iso);
+  const now = new Date();
+  if (d.toDateString() === now.toDateString()) {
+    return formatMessageTime(iso, locale);
+  }
+  return d.toLocaleDateString(locale, { day: 'numeric', month: 'short' });
+}
+
 export type Segment =
   | { type: 'text'; value: string }
   | { type: 'hashtag'; value: string }

@@ -41,7 +41,7 @@ function ResetPasswordInner() {
         <p className="rounded-md bg-green-50 px-3 py-3 text-center text-green-700">{t('resetDone')}</p>
       ) : (
         <form onSubmit={submit} className="flex flex-col gap-4">
-          {error && <p className="rounded-md bg-red-50 px-3 py-2 text-sm text-red-600">{error}</p>}
+          {error && <p className="alert-error">{error}</p>}
           <input className="input" type="password" placeholder={t('newPassword')} value={password} onChange={(e) => setPassword(e.target.value)} minLength={8} required />
           <button type="submit" disabled={busy || !token} className="btn-primary">
             {t('resetButton')}
