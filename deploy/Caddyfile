@@ -12,3 +12,8 @@
 		reverse_proxy frontend:3000
 	}
 }
+
+# Redirect www to the apex domain (Caddy fetches a cert for www too).
+www.{$SITE_DOMAIN} {
+	redir https://{$SITE_DOMAIN}{uri} permanent
+}
