@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { api, uploadToStorage } from '@/lib/api';
 import type { Yap } from '@/lib/types';
@@ -30,6 +30,18 @@ export function YapComposer({ replyToId, quoteOfId, placeholder, autoFocus, onCr
   const [drafts, setDrafts] = useState<Draft[]>([]);
   const [busy, setBusy] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  const resizeTextarea = useCallback(() => {
+    const el = textareaRef.current;
+    if (!el) return;
+    el.style.height = 'auto';
+    el.style.height = `${el.scrollHeight}px`;
+  }, []);
+
+  useEffect(() => {
+    resizeTextarea();
+  }, [content, resizeTextarea]);
 
   if (!user) return null;
 
@@ -63,6 +75,7 @@ export function YapComposer({ replyToId, quoteOfId, placeholder, autoFocus, onCr
       });
       setContent('');
       setDrafts([]);
+      requestAnimationFrame(resizeTextarea);
       onCreated?.(yap);
     } finally {
       setBusy(false);
@@ -74,12 +87,13 @@ export function YapComposer({ replyToId, quoteOfId, placeholder, autoFocus, onCr
       <Avatar url={user.avatarUrl} name={user.displayName || user.username} size={44} />
       <div className="flex-1">
         <textarea
+          ref={textareaRef}
           autoFocus={autoFocus}
           value={content}
           onChange={(e) => setContent(e.target.value)}
           placeholder={placeholder ?? t('placeholder')}
-          rows={replyToId ? 2 : 2}
-          className="w-full resize-none border-0 bg-transparent text-xl outline-none placeholder:text-muted"
+          rows={replyToId ? 3 : 4}
+          className="max-h-72 min-h-[6.5rem] w-full resize-none overflow-y-auto border-0 bg-transparent text-xl leading-relaxed outline-none placeholder:text-muted"
         />
         {drafts.length > 0 && (
           <div className="mb-2 grid grid-cols-2 gap-1">
