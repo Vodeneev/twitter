@@ -75,7 +75,10 @@
     "placeholder": "Поиск в Yapper",
     "people": "Люди",
     "yaps": "Yaps",
-    "noResults": "Ничего не найдено"
+    "noResults": "Ничего не найдено",
+    "typeToSearch": "Начните вводить запрос — результаты появятся автоматически",
+    "searchFor": "Искать «{query}»",
+    "searching": "Ищем…"
   },
   "notifications": {
     "title": "Уведомления",

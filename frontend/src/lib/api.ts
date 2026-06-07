@@ -138,8 +138,9 @@ export const api = {
   unbookmark: (id: string) => request<void>(`/api/yaps/${id}/bookmark`, { method: 'DELETE' }),
 
   // --- search ---
-  searchUsers: (q: string) => request<{ items: User[] }>(`/api/search/users${qs({ q })}`),
-  searchYaps: (q: string, cursor?: string) => request<Page<Yap>>(`/api/search/yaps${qs({ q, cursor })}`),
+  searchUsers: (q: string, limit?: number) => request<{ items: User[] }>(`/api/search/users${qs({ q, limit })}`),
+  searchYaps: (q: string, cursor?: string, limit?: number) =>
+    request<Page<Yap>>(`/api/search/yaps${qs({ q, cursor, limit })}`),
 
   // --- notifications ---
   notifications: (cursor?: string) => request<Page<AppNotification>>(`/api/notifications${qs({ cursor })}`),

@@ -50,7 +50,7 @@ export default function LoginPage() {
     <AuthCard title={t('loginTitle')}>
       <form onSubmit={submit} className="flex flex-col gap-4">
         {error && <p className="rounded-md bg-red-50 px-3 py-2 text-sm text-red-600">{error}</p>}
-        {notice && <p className="rounded-md bg-blue-50 px-3 py-2 text-sm text-brand">{notice}</p>}
+        {notice && <p className="rounded-md bg-ya-yellow/15 px-3 py-2 text-sm text-brand">{notice}</p>}
         <input className="input" placeholder={t('identifier')} value={identifier} onChange={(e) => setIdentifier(e.target.value)} autoComplete="username" required />
         <input className="input" type="password" placeholder={t('password')} value={password} onChange={(e) => setPassword(e.target.value)} autoComplete="current-password" required />
         <label className="flex items-center gap-2 text-sm text-muted">

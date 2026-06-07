@@ -11,11 +11,11 @@ import {
   BellIcon,
   BookmarkIcon,
   ExploreIcon,
-  FeatherIcon,
   HomeIcon,
   MailIcon,
   UserIcon,
 } from './icons';
+import { YapperLogo } from './brand-logo';
 import { Suggestions } from './suggestions';
 import { SearchBox } from './search-box';
 
@@ -84,9 +84,8 @@ export function AppShell({ children, rightRail = true }: { children: React.React
       {/* Left sidebar */}
       <header className="sticky top-0 hidden h-screen shrink-0 flex-col justify-between py-3 sm:flex sm:w-[88px] xl:w-[260px]">
         <div className="flex flex-col gap-1">
-          <Link href="/" className="mb-2 flex items-center gap-2 px-3 text-brand">
-            <FeatherIcon className="h-9 w-9" />
-            <span className="hidden text-2xl font-extrabold text-ink xl:inline">{tb('name')}</span>
+          <Link href="/" className="mb-2 px-3">
+            <YapperLogo wordmarkClassName="hidden text-2xl xl:inline" />
           </Link>
           {items
             .filter((it) => !it.authOnly || user)

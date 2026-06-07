@@ -35,18 +35,24 @@ function SearchInner() {
       <div className="border-b border-line p-3">
         <SearchBox initial={q} />
       </div>
-      <Tabs<Tab>
-        tabs={[
-          { id: 'yaps', label: t('yaps') },
-          { id: 'people', label: t('people') },
-        ]}
-        active={tab}
-        onChange={setTab}
-      />
-      {tab === 'people' ? (
-        <UserList users={people} empty={t('noResults')} />
+      {!q ? (
+        <div className="px-6 py-12 text-center text-muted">{t('typeToSearch')}</div>
       ) : (
-        <Timeline key={q} fetcher={fetcher} emptyText={t('noResults')} />
+        <>
+          <Tabs<Tab>
+            tabs={[
+              { id: 'yaps', label: t('yaps') },
+              { id: 'people', label: t('people') },
+            ]}
+            active={tab}
+            onChange={setTab}
+          />
+          {tab === 'people' ? (
+            <UserList users={people} empty={t('noResults')} />
+          ) : (
+            <Timeline key={q} fetcher={fetcher} emptyText={t('noResults')} />
+          )}
+        </>
       )}
     </AppShell>
   );

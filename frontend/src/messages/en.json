@@ -75,7 +75,10 @@
     "placeholder": "Search Yapper",
     "people": "People",
     "yaps": "Yaps",
-    "noResults": "No results"
+    "noResults": "No results",
+    "typeToSearch": "Start typing — results update as you go",
+    "searchFor": "Search for \"{query}\"",
+    "searching": "Searching…"
   },
   "notifications": {
     "title": "Notifications",

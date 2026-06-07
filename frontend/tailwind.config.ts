@@ -6,12 +6,16 @@ const config: Config = {
     extend: {
       colors: {
         brand: {
-          DEFAULT: '#1d9bf0',
-          hover: '#1a8cd8',
+          DEFAULT: '#FC3F1D',
+          hover: '#E03518',
         },
-        ink: '#0f1419',
-        muted: '#536471',
-        line: '#eff3f4',
+        ya: {
+          red: '#FC3F1D',
+          yellow: '#FFCC00',
+        },
+        ink: '#21201F',
+        muted: '#6D6D6D',
+        line: '#F0F0F0',
       },
       maxWidth: {
         feed: '600px',

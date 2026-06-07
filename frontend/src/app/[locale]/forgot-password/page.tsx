@@ -27,7 +27,7 @@ export default function ForgotPasswordPage() {
   return (
     <AuthCard title={t('forgotTitle')}>
       {sent ? (
-        <p className="rounded-md bg-blue-50 px-3 py-3 text-center text-brand">{t('resetSent')}</p>
+        <p className="rounded-md bg-ya-yellow/15 px-3 py-3 text-center text-brand">{t('resetSent')}</p>
       ) : (
         <form onSubmit={submit} className="flex flex-col gap-4">
           <p className="text-sm text-muted">{t('forgotHint')}</p>

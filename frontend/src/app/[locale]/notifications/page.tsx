@@ -74,7 +74,7 @@ function NotificationsInner() {
         const name = n.actor.displayName || n.actor.username;
         const href = n.yapId ? `/yap/${n.yapId}` : `/${n.actor.username}`;
         return (
-          <Link key={n.id} href={href} className={`flex gap-3 border-b border-line px-4 py-3 hover:bg-gray-50 ${n.read ? '' : 'bg-blue-50/40'}`}>
+          <Link key={n.id} href={href} className={`flex gap-3 border-b border-line px-4 py-3 hover:bg-gray-50 ${n.read ? '' : 'bg-ya-yellow/10'}`}>
             <div className="pt-1">{icon(n.type)}</div>
             <div className="min-w-0">
               <Avatar url={n.actor.avatarUrl} name={name} size={32} />
