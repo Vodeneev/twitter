@@ -1,0 +1,14 @@
+# Same-origin reverse proxy: /api/* (incl. WebSocket /api/ws) -> Go backend,
+# everything else -> Next.js. Caddy terminates TLS via Let's Encrypt.
+{$SITE_DOMAIN} {
+	encode zstd gzip
+
+	@api path /api/* /healthz /readyz
+	handle @api {
+		reverse_proxy backend:8080
+	}
+
+	handle {
+		reverse_proxy frontend:3000
+	}
+}

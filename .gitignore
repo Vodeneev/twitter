@@ -1,0 +1,26 @@
+# Environment
+.env
+.env.local
+.env.prod
+deploy/.env.prod
+
+# Go
+backend/bin/
+*.test
+*.out
+
+# Node / Next.js
+node_modules/
+frontend/.next/
+frontend/out/
+frontend/dist/
+frontend/coverage/
+frontend/test-results/
+frontend/playwright-report/
+npm-debug.log*
+
+# Editors / OS
+.DS_Store
+.idea/
+.vscode/
+*.swp

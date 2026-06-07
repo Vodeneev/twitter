@@ -1,0 +1,70 @@
+name: Deploy YC
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-yc
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    name: Deploy to Yandex Cloud VM
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    env:
+      ADMIN_EMAILS_SECRET: ${{ secrets.ADMIN_EMAILS }}
+      ADMIN_EMAILS_VAR: ${{ vars.ADMIN_EMAILS }}
+    steps:
+      - name: Deploy over SSH
+        uses: appleboy/ssh-action@v1.2.2
+        with:
+          host: ${{ secrets.YC_VM_HOST }}
+          username: ${{ secrets.YC_VM_USER }}
+          key: ${{ secrets.YC_VM_SSH_KEY }}
+          envs: ADMIN_EMAILS_SECRET,ADMIN_EMAILS_VAR
+          script: |
+            set -eu
+
+            APP_DIR="$HOME/yapper"
+            REPO_SSH="git@github.com:${{ github.repository }}.git"
+            DEPLOY_KEY_PATH="/tmp/yapper_repo_deploy_key"
+
+            cleanup() { rm -f "$DEPLOY_KEY_PATH"; }
+            trap cleanup EXIT
+
+            umask 077
+            cat > "$DEPLOY_KEY_PATH" <<'EOF'
+            ${{ secrets.YC_GITHUB_DEPLOY_KEY }}
+            EOF
+            chmod 600 "$DEPLOY_KEY_PATH"
+
+            export GIT_SSH_COMMAND="ssh -i $DEPLOY_KEY_PATH -o IdentitiesOnly=yes -o StrictHostKeyChecking=accept-new"
+
+            if [ ! -d "$APP_DIR/.git" ]; then
+              rm -rf "$APP_DIR"
+              git clone --branch main "$REPO_SSH" "$APP_DIR"
+            fi
+
+            cd "$APP_DIR"
+            git fetch origin
+            git checkout main
+            git pull --ff-only origin main
+
+            cd deploy
+            test -f .env.prod
+
+            # Keep admin list managed from GitHub variables/secrets, no manual SSH edits.
+            ADMIN_EMAILS_VALUE="${ADMIN_EMAILS_SECRET:-${ADMIN_EMAILS_VAR:-}}"
+            if [ -n "$ADMIN_EMAILS_VALUE" ]; then
+              if grep -q "^ADMIN_EMAILS=" ".env.prod"; then
+                sed -i.bak "s|^ADMIN_EMAILS=.*|ADMIN_EMAILS=${ADMIN_EMAILS_VALUE}|" ".env.prod"
+              else
+                printf "\nADMIN_EMAILS=%s\n" "$ADMIN_EMAILS_VALUE" >> ".env.prod"
+              fi
+            fi
+
+            docker compose -f docker-compose.prod.yml --env-file .env.prod up -d --build migrate backend frontend caddy

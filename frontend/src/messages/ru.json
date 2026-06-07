@@ -1,0 +1,143 @@
+{
+  "brand": { "name": "Yapper", "tagline": "Чирикай, как хочешь" },
+  "nav": {
+    "home": "Главная",
+    "explore": "Обзор",
+    "notifications": "Уведомления",
+    "messages": "Сообщения",
+    "bookmarks": "Закладки",
+    "profile": "Профиль",
+    "settings": "Настройки",
+    "logout": "Выйти",
+    "login": "Войти",
+    "register": "Регистрация",
+    "search": "Поиск"
+  },
+  "timeline": {
+    "forYou": "Для вас",
+    "following": "Подписки",
+    "empty": "Пока пусто. Подпишитесь на людей или напишите первый yap!",
+    "loadMore": "Показать ещё",
+    "loading": "Загрузка…"
+  },
+  "composer": {
+    "placeholder": "Что происходит?!",
+    "replyPlaceholder": "Напишите свой ответ",
+    "submit": "Чирикнуть",
+    "reply": "Ответить",
+    "addImage": "Добавить фото",
+    "tooLong": "Слишком длинно (макс. 280 символов)"
+  },
+  "yap": {
+    "reply": "Ответить",
+    "repost": "Репост",
+    "reposted": "сделал(а) репост",
+    "like": "Нравится",
+    "bookmark": "В закладки",
+    "share": "Поделиться",
+    "delete": "Удалить",
+    "deleteConfirm": "Удалить этот yap?",
+    "quote": "Цитировать",
+    "replyingTo": "В ответ",
+    "replies": "Ответы"
+  },
+  "profile": {
+    "follow": "Читать",
+    "unfollow": "Отписаться",
+    "following": "Вы подписаны",
+    "editProfile": "Редактировать профиль",
+    "message": "Написать",
+    "followers": "Читателей",
+    "followingCount": "Читает",
+    "yaps": "Yaps",
+    "tabs": {
+      "yaps": "Yaps",
+      "replies": "Ответы",
+      "media": "Медиа",
+      "likes": "Нравится"
+    },
+    "joined": "С нами с {date}",
+    "notFound": "Пользователь не найден"
+  },
+  "settings": {
+    "title": "Редактировать профиль",
+    "displayName": "Имя",
+    "bio": "О себе",
+    "location": "Местоположение",
+    "website": "Сайт",
+    "avatar": "Аватар",
+    "header": "Шапка",
+    "save": "Сохранить",
+    "saved": "Сохранено"
+  },
+  "search": {
+    "title": "Поиск",
+    "placeholder": "Поиск в Yapper",
+    "people": "Люди",
+    "yaps": "Yaps",
+    "noResults": "Ничего не найдено"
+  },
+  "notifications": {
+    "title": "Уведомления",
+    "empty": "Пока нет уведомлений",
+    "like": "оценил(а) ваш yap",
+    "follow": "подписался(ась) на вас",
+    "reply": "ответил(а) на ваш yap",
+    "repost": "сделал(а) репост вашего yap",
+    "quote": "процитировал(а) ваш yap",
+    "mention": "упомянул(а) вас"
+  },
+  "messages": {
+    "title": "Сообщения",
+    "empty": "Нет переписок",
+    "newMessage": "Новое сообщение",
+    "placeholder": "Напишите сообщение…",
+    "send": "Отправить",
+    "selectConversation": "Выберите переписку"
+  },
+  "bookmarks": { "title": "Закладки", "empty": "Вы ещё ничего не добавили в закладки" },
+  "suggestions": { "title": "Кого читать", "showMore": "Показать ещё" },
+  "auth": {
+    "loginTitle": "Войти в Yapper",
+    "registerTitle": "Создать аккаунт",
+    "identifier": "Email или @имя",
+    "email": "Email",
+    "username": "Имя пользователя (латиницей)",
+    "displayName": "Отображаемое имя",
+    "password": "Пароль",
+    "rememberMe": "Запомнить меня",
+    "loginButton": "Войти",
+    "registerButton": "Зарегистрироваться",
+    "noAccount": "Нет аккаунта?",
+    "haveAccount": "Уже есть аккаунт?",
+    "forgotPassword": "Забыли пароль?",
+    "logout": "Выйти",
+    "emailNotVerified": "Email не подтверждён. Мы отправили новую ссылку.",
+    "resend": "Отправить письмо ещё раз",
+    "checkEmail": "Проверьте почту — мы отправили ссылку для подтверждения.",
+    "verifying": "Подтверждаем e-mail…",
+    "verified": "E-mail подтверждён! Теперь войдите.",
+    "verifyFailed": "Ссылка недействительна или истекла.",
+    "forgotTitle": "Сброс пароля",
+    "forgotHint": "Введите email — мы пришлём ссылку для сброса пароля.",
+    "sendReset": "Отправить ссылку",
+    "resetSent": "Если такой email есть, мы отправили ссылку.",
+    "resetTitle": "Новый пароль",
+    "newPassword": "Новый пароль",
+    "resetButton": "Сменить пароль",
+    "resetDone": "Пароль изменён! Войдите снова.",
+    "errors": {
+      "invalid_credentials": "Неверный email/имя или пароль",
+      "email_taken": "Этот email уже зарегистрирован",
+      "username_taken": "Это имя уже занято",
+      "validation": "Проверьте введённые данные",
+      "internal_error": "Что-то пошло не так. Попробуйте ещё раз."
+    }
+  },
+  "common": {
+    "cancel": "Отмена",
+    "back": "Назад",
+    "loading": "Загрузка…",
+    "retry": "Повторить"
+  }
+}

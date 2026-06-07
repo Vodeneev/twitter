@@ -1,0 +1,143 @@
+{
+  "brand": { "name": "Yapper", "tagline": "Yap however you like" },
+  "nav": {
+    "home": "Home",
+    "explore": "Explore",
+    "notifications": "Notifications",
+    "messages": "Messages",
+    "bookmarks": "Bookmarks",
+    "profile": "Profile",
+    "settings": "Settings",
+    "logout": "Log out",
+    "login": "Log in",
+    "register": "Sign up",
+    "search": "Search"
+  },
+  "timeline": {
+    "forYou": "For you",
+    "following": "Following",
+    "empty": "Nothing here yet. Follow people or post your first yap!",
+    "loadMore": "Show more",
+    "loading": "Loading…"
+  },
+  "composer": {
+    "placeholder": "What's happening?!",
+    "replyPlaceholder": "Post your reply",
+    "submit": "Yap",
+    "reply": "Reply",
+    "addImage": "Add image",
+    "tooLong": "Too long (max 280 characters)"
+  },
+  "yap": {
+    "reply": "Reply",
+    "repost": "Repost",
+    "reposted": "reposted",
+    "like": "Like",
+    "bookmark": "Bookmark",
+    "share": "Share",
+    "delete": "Delete",
+    "deleteConfirm": "Delete this yap?",
+    "quote": "Quote",
+    "replyingTo": "Replying to",
+    "replies": "Replies"
+  },
+  "profile": {
+    "follow": "Follow",
+    "unfollow": "Unfollow",
+    "following": "Following",
+    "editProfile": "Edit profile",
+    "message": "Message",
+    "followers": "Followers",
+    "followingCount": "Following",
+    "yaps": "Yaps",
+    "tabs": {
+      "yaps": "Yaps",
+      "replies": "Replies",
+      "media": "Media",
+      "likes": "Likes"
+    },
+    "joined": "Joined {date}",
+    "notFound": "User not found"
+  },
+  "settings": {
+    "title": "Edit profile",
+    "displayName": "Name",
+    "bio": "Bio",
+    "location": "Location",
+    "website": "Website",
+    "avatar": "Avatar",
+    "header": "Header",
+    "save": "Save",
+    "saved": "Saved"
+  },
+  "search": {
+    "title": "Search",
+    "placeholder": "Search Yapper",
+    "people": "People",
+    "yaps": "Yaps",
+    "noResults": "No results"
+  },
+  "notifications": {
+    "title": "Notifications",
+    "empty": "No notifications yet",
+    "like": "liked your yap",
+    "follow": "followed you",
+    "reply": "replied to your yap",
+    "repost": "reposted your yap",
+    "quote": "quoted your yap",
+    "mention": "mentioned you"
+  },
+  "messages": {
+    "title": "Messages",
+    "empty": "No conversations",
+    "newMessage": "New message",
+    "placeholder": "Start a new message…",
+    "send": "Send",
+    "selectConversation": "Select a conversation"
+  },
+  "bookmarks": { "title": "Bookmarks", "empty": "You haven't bookmarked anything yet" },
+  "suggestions": { "title": "Who to follow", "showMore": "Show more" },
+  "auth": {
+    "loginTitle": "Log in to Yapper",
+    "registerTitle": "Create your account",
+    "identifier": "Email or @username",
+    "email": "Email",
+    "username": "Username (latin)",
+    "displayName": "Display name",
+    "password": "Password",
+    "rememberMe": "Remember me",
+    "loginButton": "Log in",
+    "registerButton": "Sign up",
+    "noAccount": "Don't have an account?",
+    "haveAccount": "Already have an account?",
+    "forgotPassword": "Forgot password?",
+    "logout": "Log out",
+    "emailNotVerified": "Email not verified. We sent a fresh link.",
+    "resend": "Resend verification email",
+    "checkEmail": "Check your inbox — we sent a verification link.",
+    "verifying": "Verifying your email…",
+    "verified": "Email verified! You can log in now.",
+    "verifyFailed": "The link is invalid or has expired.",
+    "forgotTitle": "Reset password",
+    "forgotHint": "Enter your email and we'll send a reset link.",
+    "sendReset": "Send reset link",
+    "resetSent": "If that email exists, we sent a link.",
+    "resetTitle": "New password",
+    "newPassword": "New password",
+    "resetButton": "Change password",
+    "resetDone": "Password changed! Log in again.",
+    "errors": {
+      "invalid_credentials": "Wrong email/username or password",
+      "email_taken": "This email is already registered",
+      "username_taken": "This username is taken",
+      "validation": "Please check your input",
+      "internal_error": "Something went wrong. Please try again."
+    }
+  },
+  "common": {
+    "cancel": "Cancel",
+    "back": "Back",
+    "loading": "Loading…",
+    "retry": "Retry"
+  }
+}
