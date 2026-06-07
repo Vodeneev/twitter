@@ -19,8 +19,18 @@ export class ApiError extends Error {
   }
 }
 
+// apiBase resolves the API origin. In the browser we default to the current
+// origin, because in production Caddy serves the API under /api on the same
+// host (so it works for any domain without a rebuild). An explicit
+// NEXT_PUBLIC_API_URL (e.g. local dev against :8080) always wins.
 function apiBase(): string {
-  return process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8080';
+  if (process.env.NEXT_PUBLIC_API_URL) {
+    return process.env.NEXT_PUBLIC_API_URL;
+  }
+  if (typeof window !== 'undefined') {
+    return window.location.origin;
+  }
+  return 'http://localhost:8080';
 }
 
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
