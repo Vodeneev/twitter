@@ -30,23 +30,12 @@ jobs:
             set -eu
 
             APP_DIR="$HOME/yapper"
-            REPO_SSH="git@github.com:${{ github.repository }}.git"
-            DEPLOY_KEY_PATH="/tmp/yapper_repo_deploy_key"
+            REPO_HTTPS="https://github.com/${{ github.repository }}.git"
 
-            cleanup() { rm -f "$DEPLOY_KEY_PATH"; }
-            trap cleanup EXIT
-
-            umask 077
-            cat > "$DEPLOY_KEY_PATH" <<'EOF'
-            ${{ secrets.YC_GITHUB_DEPLOY_KEY }}
-            EOF
-            chmod 600 "$DEPLOY_KEY_PATH"
-
-            export GIT_SSH_COMMAND="ssh -i $DEPLOY_KEY_PATH -o IdentitiesOnly=yes -o StrictHostKeyChecking=accept-new"
-
+            # Public repository — clone/pull over HTTPS, no deploy key needed.
             if [ ! -d "$APP_DIR/.git" ]; then
               rm -rf "$APP_DIR"
-              git clone --branch main "$REPO_SSH" "$APP_DIR"
+              git clone --branch main "$REPO_HTTPS" "$APP_DIR"
             fi
 
             cd "$APP_DIR"
