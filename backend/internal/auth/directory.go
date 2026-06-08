@@ -88,8 +88,6 @@ func (r *UserRepository) Search(ctx context.Context, q string, viewer *uuid.UUID
 		WHERE u.is_banned = FALSE AND (
 			lower(u.username) LIKE $3 ESCAPE '\'
 			OR lower(COALESCE(u.display_name, '')) LIKE $3 ESCAPE '\'
-			OR word_similarity(lower($2), lower(u.username)) > 0.2
-			OR word_similarity(lower($2), lower(COALESCE(u.display_name, ''))) > 0.2
 		)
 		ORDER BY
 			CASE

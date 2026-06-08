@@ -334,13 +334,11 @@ func (r *Repository) SearchYaps(ctx context.Context, q string, viewer *uuid.UUID
 					+ GREATEST(
 						word_similarity(lower($2), lower(y.content)),
 						similarity(lower(y.content), lower($2))
-					) * 200.0
+					) * 50.0
 				) AS score,
 				y.created_at
 			FROM yaps y
 			WHERE lower(y.content) LIKE $3 ESCAPE '\'
-			   OR word_similarity(lower($2), lower(y.content)) > 0.2
-			   OR similarity(lower(y.content), lower($2)) > 0.12
 		)
 		SELECT `+yapCols+`
 		FROM ranked r

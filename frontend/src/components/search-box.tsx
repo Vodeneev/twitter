@@ -31,12 +31,15 @@ export function SearchBox({ initial = '' }: { initial?: string }) {
     setQ(initial);
   }, [initial]);
 
+  // Sync URL while typing; wait until debounce caught up so Enter does not get overwritten.
   useEffect(() => {
     if (!onSearchPage) return;
+    const typed = q.trim();
+    if (typed !== debounced) return;
     const currentQ = new URL(window.location.href).searchParams.get('q') ?? '';
     if (debounced === currentQ) return;
     router.replace(debounced ? `/search?q=${encodeURIComponent(debounced)}` : '/search');
-  }, [debounced, onSearchPage, router]);
+  }, [debounced, onSearchPage, q, router]);
 
   useEffect(() => {
     if (onSearchPage || debounced.length === 0) {
@@ -84,7 +87,9 @@ export function SearchBox({ initial = '' }: { initial?: string }) {
     const trimmed = term.trim();
     if (!trimmed) return;
     setOpen(false);
-    router.push(`/search?q=${encodeURIComponent(trimmed)}`);
+    const href = `/search?q=${encodeURIComponent(trimmed)}`;
+    if (onSearchPage) router.replace(href);
+    else router.push(href);
   };
 
   const showDropdown = !onSearchPage && open && debounced.length > 0;
