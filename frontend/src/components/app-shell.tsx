@@ -27,6 +27,8 @@ interface NavItem {
   label: string;
   icon: (active: boolean) => React.ReactNode;
   badge?: number;
+  /** Hide in the icon rail on wide desktop — shown elsewhere (e.g. footer buttons). */
+  hideOnXl?: boolean;
 }
 
 export function AppShell({ children, rightRail = true }: { children: React.ReactNode; rightRail?: boolean }) {
@@ -78,8 +80,8 @@ export function AppShell({ children, rightRail = true }: { children: React.React
     if (!user) {
       return [
         ...base,
-        { href: '/login', label: t('login'), icon: () => <LoginIcon className="h-7 w-7" /> },
-        { href: '/register', label: t('register'), icon: () => <UserIcon className="h-7 w-7" /> },
+        { href: '/login', label: t('login'), icon: () => <LoginIcon className="h-7 w-7" />, hideOnXl: true },
+        { href: '/register', label: t('register'), icon: () => <UserIcon className="h-7 w-7" />, hideOnXl: true },
       ];
     }
     return [
@@ -112,7 +114,7 @@ export function AppShell({ children, rightRail = true }: { children: React.React
                 href={it.href}
                 className={`relative flex shrink-0 items-center justify-center gap-4 rounded-full p-2 transition hover:bg-gray-100 xl:justify-start xl:px-3 xl:py-2.5 ${
                   active ? 'font-extrabold' : 'font-normal'
-                }`}
+                } ${it.hideOnXl ? 'xl:hidden' : ''}`}
               >
                 <span className="relative [&_svg]:h-6 [&_svg]:w-6 xl:[&_svg]:h-7 xl:[&_svg]:w-7">
                   {it.icon(active)}
